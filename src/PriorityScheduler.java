@@ -43,12 +43,21 @@ public class PriorityScheduler extends Scheduler{
         firstProcess.setTurnAround(turnAround);
 
 
+        printTableInfo();
+        printProcess(firstProcess);
+//        System.out.println(firstProcess.getProcessId() + "                " + firstProcess.getPriority() + "        " + "       " + firstProcess.getArrivalTime() + "                " + "    " + firstProcess.getBurstTime() + "             " + "        " + firstProcess.getTurnAround() + "    " + "                " + firstProcess.getWaitingTime() + "    ");
 
+        for (Process process : processes) {
+            System.out.println(process.Priority);
+        }
+    }
+
+    void printTableInfo() {
         System.out.println("Processes" + "     Priority   " + "    ArrivalT Time     " +  "    BurstTime     " +  "     Turnaround Time   " + "    Waiting Time     ");
-        System.out.println(firstProcess.getProcessId() + "                " + firstProcess.getPriority() + "        " + "       " + firstProcess.getArrivalTime() + "                " + "    " + firstProcess.getBurstTime() + "             " + "        " + firstProcess.getTurnAround() + "    " + "                " + firstProcess.getWaitingTime() + "    ");
+    }
 
-//        for (Process process : processes) {
-//            System.out.println(process.Priority);
-//        }
+    void printProcess(Process process) {
+        System.out.println(process.getProcessId() + "                " + process.getPriority() + "        " + "       " + process.getArrivalTime() + "                " + "    " + process.getBurstTime() + "             " + "        " + process.getTurnAround() + "    " + "                " + process.getWaitingTime() + "    ");
+
     }
 }
