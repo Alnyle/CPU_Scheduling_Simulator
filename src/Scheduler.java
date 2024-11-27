@@ -6,6 +6,8 @@ public class Scheduler {
 
     int completionTime;
 
+    int currentTime;
+
     int totalBurstTime;
 
     float avgWaitingTime;
@@ -71,5 +73,6 @@ public class Scheduler {
         completionTime = 0;
         totalWaitingTime = 0;
         totalTurnAround = 0;
+        currentTime = 0;
     }
 }

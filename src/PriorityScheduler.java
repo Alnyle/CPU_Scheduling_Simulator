@@ -25,6 +25,7 @@ public class PriorityScheduler extends Scheduler{
 
         // calculate Completion for first process =
         completionTime = firstProcess.getBurstTime() + firstProcess.arrivalTime;
+        currentTime += completionTime;
 
         // calculate Turn around for first process => Turn Around Time = Completion Time - Arrival Time
         int turnAround = completionTime - firstProcess.arrivalTime;
@@ -45,10 +46,41 @@ public class PriorityScheduler extends Scheduler{
 
         printTableInfo();
         printProcess(firstProcess);
-//        System.out.println(firstProcess.getProcessId() + "                " + firstProcess.getPriority() + "        " + "       " + firstProcess.getArrivalTime() + "                " + "    " + firstProcess.getBurstTime() + "             " + "        " + firstProcess.getTurnAround() + "    " + "                " + firstProcess.getWaitingTime() + "    ");
 
-        for (Process process : processes) {
-            System.out.println(process.Priority);
+        while (!processes.isEmpty()) {
+            //
+//            boolean
+            Process currentProcess = null;
+            for (Process process: processes) {
+
+                //
+                if (currentTime < process.getArrivalTime()) {
+                    continue;
+                } else {
+
+                    completionTime += currentProcess.getBurstTime();
+                    // calculate Turn around for first process => Turn Around Time = Completion Time - Arrival Time
+                    turnAround = completionTime - currentProcess.arrivalTime;
+
+
+                    // calculate waiting time for first process => Waiting Time = Turn Around Time - Burst Time
+                    waitingTime = turnAround - currentProcess.getBurstTime();
+
+                    // increase total Turn Around time
+                    totalTurnAround += turnAround;
+
+                    // increase total waiting Time
+                    totalWaitingTime += turnAround;
+
+                    printTableInfo();
+                    printProcess(currentProcess);
+                }
+
+                if (!processes.isEmpty()) currentTime++;
+
+            }
+
+//            System.out.println(process.Priority);
         }
     }
 
