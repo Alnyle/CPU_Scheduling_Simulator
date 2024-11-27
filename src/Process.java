@@ -101,11 +101,7 @@ class sortBasedArrivalTime implements Comparator<Process>  {
 
     @Override
     public int compare(Process o1, Process o2) {
-        if (o1.getArrivalTime() - o2.getArrivalTime() == 0) {
-            return o1.processId - o2.processId;
-        } else {
-            return o1.getArrivalTime() - o2.getArrivalTime();
-        }
+        return o1.getArrivalTime() - o2.getArrivalTime();
     }
 }
 

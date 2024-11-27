@@ -23,6 +23,10 @@ public class PriorityScheduler extends Scheduler{
         // sort other process based on there Priority
         processes.sort(new sortBasedPriority());
 
+
+
+
+
         // calculate Completion for first process =
         completionTime = firstProcess.getBurstTime() + firstProcess.arrivalTime;
         currentTime += completionTime;
@@ -47,40 +51,60 @@ public class PriorityScheduler extends Scheduler{
         printTableInfo();
         printProcess(firstProcess);
 
-        while (!processes.isEmpty()) {
-            //
-//            boolean
-            Process currentProcess = null;
-            for (Process process: processes) {
 
-                //
+
+        while (!processes.isEmpty()) {
+
+
+            int MinArrivalTime = processes.getFirst().getArrivalTime();
+            Process currentProcess = null;
+
+            ArrayList<Process> readyQueue = new ArrayList<>();
+            for (Process process: processes) {
+                // process don't arrived yet to ready queue
                 if (currentTime < process.getArrivalTime()) {
+                    MinArrivalTime = Math.min(MinArrivalTime, process.getArrivalTime());
                     continue;
                 } else {
-
-                    completionTime += currentProcess.getBurstTime();
-                    // calculate Turn around for first process => Turn Around Time = Completion Time - Arrival Time
-                    turnAround = completionTime - currentProcess.arrivalTime;
-
-
-                    // calculate waiting time for first process => Waiting Time = Turn Around Time - Burst Time
-                    waitingTime = turnAround - currentProcess.getBurstTime();
-
-                    // increase total Turn Around time
-                    totalTurnAround += turnAround;
-
-                    // increase total waiting Time
-                    totalWaitingTime += turnAround;
-
-                    printTableInfo();
-                    printProcess(currentProcess);
+                    // get the process with the highest priority process if there process or more arrived to ready queue
+                    currentProcess = process;
+                    break;
                 }
-
-                if (!processes.isEmpty()) currentTime++;
-
             }
 
-//            System.out.println(process.Priority);
+
+            if (currentProcess != null) {
+                processes.sort(new sortBasedPriority());
+//                completionTime += currentProcess.getBurstTime();
+                currentTime += currentProcess.getBurstTime();
+                // calculate Turn around for first process => Turn Around Time = Completion Time - Arrival Time
+                turnAround = currentTime - currentProcess.arrivalTime;
+
+
+                // calculate waiting time for first process => Waiting Time = Turn Around Time - Burst Time
+                waitingTime = turnAround - currentProcess.getBurstTime();
+
+                // increase total Turn Around time
+                totalTurnAround += turnAround;
+
+                // increase total waiting Time
+                totalWaitingTime += turnAround;
+
+                currentProcess.setWaitingTime(waitingTime);
+                currentProcess.setTurnAround(turnAround);
+
+
+                printProcess(currentProcess);
+
+                // remove process from CPU after finishing
+                processes.remove(currentProcess);
+                // sort other process based on there Priority
+
+            } else {
+                currentTime = MinArrivalTime;
+                continue;
+            }
+
         }
     }
 
