@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class Scheduler {
 
     ArrayList<Process> processes;
+    int totalProcessScheduled;
 
     int completionTime;
 
@@ -74,5 +75,6 @@ public class Scheduler {
         totalWaitingTime = 0;
         totalTurnAround = 0;
         currentTime = 0;
+        totalProcessScheduled = 0;
     }
 }

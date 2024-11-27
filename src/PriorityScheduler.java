@@ -14,6 +14,9 @@ public class PriorityScheduler extends Scheduler{
 
     void schedule() {
 
+        printTableInfo();
+        if (processes.isEmpty()) return;
+
         // sort processes based arrival time
         processes.sort(new sortBasedArrivalTime());
 
@@ -42,13 +45,13 @@ public class PriorityScheduler extends Scheduler{
         totalTurnAround += turnAround;
 
         // increase total waiting Time
-        totalWaitingTime += turnAround;
+        totalWaitingTime += waitingTime;
 
         firstProcess.setWaitingTime(waitingTime);
         firstProcess.setTurnAround(turnAround);
+        totalProcessScheduled++;
 
 
-        printTableInfo();
         printProcess(firstProcess);
 
 
@@ -59,8 +62,8 @@ public class PriorityScheduler extends Scheduler{
             int MinArrivalTime = processes.getFirst().getArrivalTime();
             Process currentProcess = null;
 
-            ArrayList<Process> readyQueue = new ArrayList<>();
             for (Process process: processes) {
+
                 // process don't arrived yet to ready queue
                 if (currentTime < process.getArrivalTime()) {
                     MinArrivalTime = Math.min(MinArrivalTime, process.getArrivalTime());
@@ -75,8 +78,10 @@ public class PriorityScheduler extends Scheduler{
 
             if (currentProcess != null) {
                 processes.sort(new sortBasedPriority());
-//                completionTime += currentProcess.getBurstTime();
+
+                // update current time
                 currentTime += currentProcess.getBurstTime();
+
                 // calculate Turn around for first process => Turn Around Time = Completion Time - Arrival Time
                 turnAround = currentTime - currentProcess.arrivalTime;
 
@@ -88,7 +93,7 @@ public class PriorityScheduler extends Scheduler{
                 totalTurnAround += turnAround;
 
                 // increase total waiting Time
-                totalWaitingTime += turnAround;
+                totalWaitingTime += waitingTime;
 
                 currentProcess.setWaitingTime(waitingTime);
                 currentProcess.setTurnAround(turnAround);
@@ -98,7 +103,9 @@ public class PriorityScheduler extends Scheduler{
 
                 // remove process from CPU after finishing
                 processes.remove(currentProcess);
-                // sort other process based on there Priority
+
+
+                totalProcessScheduled++;
 
             } else {
                 currentTime = MinArrivalTime;
@@ -106,6 +113,17 @@ public class PriorityScheduler extends Scheduler{
             }
 
         }
+
+        // get calculate average waiting time
+        float avgWTime = (float) totalTurnAround / totalProcessScheduled;
+        setAvgWaitingTime(avgWTime);
+
+        // get calculate average Turn Around
+        float avgTATime = (float) totalWaitingTime/ totalProcessScheduled;
+        setAvgTurnAround(avgTATime);
+
+        System.out.println("Average waiting Time: " + avgWTime);
+        System.out.println("Average Turn Around Time: " + avgTATime);
     }
 
     void printTableInfo() {
