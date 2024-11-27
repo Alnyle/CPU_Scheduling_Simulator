@@ -1,3 +1,5 @@
+import java.util.Comparator;
+
 public class Process {
 
     int processId;
@@ -6,12 +8,45 @@ public class Process {
     int Priority;
     int Quantum;
 
+
+    int waitingTime;
+    int turnAround;
+
+    int completionTime;
+
+    public int getCompletionTime() {
+        return completionTime;
+    }
+
+    public void setCompletionTime(int completionTime) {
+        this.completionTime = completionTime;
+    }
+
+    public int getWaitingTime() {
+        return waitingTime;
+    }
+
+    public void setWaitingTime(int waitingTime) {
+        this.waitingTime = waitingTime;
+    }
+
+    public int getTurnAround() {
+        return turnAround;
+    }
+
+    public void setTurnAround(int turnAround) {
+        this.turnAround = turnAround;
+    }
+
     public Process(int processId, int burstTime, int arrivalTime, int priority, int quantum) {
         this.processId = processId;
         BurstTime = burstTime;
         this.arrivalTime = arrivalTime;
         Priority = priority;
         Quantum = quantum;
+        waitingTime = 0;
+        turnAround = 0;
+        completionTime = 0;
     }
 
     public int getProcessId() {
@@ -53,4 +88,25 @@ public class Process {
     public void setQuantum(int quantum) {
         Quantum = quantum;
     }
+
 }
+
+class sortBasedPriority implements Comparator<Process> {
+    public int compare(Process o1, Process o2) {
+        return o1.getPriority() - o2.getPriority();
+    }
+}
+
+class sortBasedArrivalTime implements Comparator<Process>  {
+
+    @Override
+    public int compare(Process o1, Process o2) {
+        if (o1.getArrivalTime() - o2.getArrivalTime() == 0) {
+            return o1.processId - o2.processId;
+        } else {
+            return o1.getArrivalTime() - o2.getArrivalTime();
+        }
+    }
+}
+
+

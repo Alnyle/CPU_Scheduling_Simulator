@@ -5,6 +5,9 @@ public class Main {
 
         ArrayList<Process> processes = getProcesses();
 
+        PriorityScheduler priorityScheduler = new PriorityScheduler(processes);
+        priorityScheduler.schedule();
+
     }
 
 
